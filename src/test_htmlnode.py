@@ -10,9 +10,9 @@ class TestHTMLNode(unittest.TestCase):
     
 
     def test_props2(self):
-        control = " href=\"\" target=\"\""
         compare = HTMLNode(None, None, None, None)
-        self.assertEqual(control, compare.props_to_html())
+        with self.assertRaises(TypeError):
+            compare.props_to_html()
 
 
     def test_props3(self):
@@ -59,7 +59,7 @@ class TestHTMLNode(unittest.TestCase):
         self.assertEqual(control, node.to_html())
 
 
-    def test_parent_to_html_nested_parent(self):
+    def test_parent_to_html_nested_parent_womp(self):
         control = "<p>Normal text<p><b>Bold text</b>Normal text</p><i>italic text</i></p>"
         node = ParentNode(
         "p",
@@ -110,37 +110,37 @@ class TestHTMLNode(unittest.TestCase):
         )
         self.assertEqual(control, node.to_html())
 
-    def test_text_node_to_html_node(self):
+    def test_text_node_to_html_node_aight(self):
         control = "hehehe"
         compare = TextNode("hehehe", TextType.NORMAL, {"href": "https://dork.com"})
         self.assertEqual(control, text_node_to_html_node(compare))
 
-    def test_text_node_to_html_node(self):
+    def test_text_node_to_html_node_bruh(self):
         control = "<b>hehehe</b>"
         compare = TextNode("hehehe", TextType.BOLD, {"href": "https://dork.com"})
         self.assertEqual(control, text_node_to_html_node(compare))
 
-    def test_text_node_to_html_node(self):
+    def test_text_node_to_html_no(self):
         control = "<i>hehehe</i>"
         compare = TextNode("hehehe", TextType.ITALIC, {"href": "https://dork.com"})
         self.assertEqual(control, text_node_to_html_node(compare))
 
-    def test_text_node_to_html_node(self):
+    def test_text_node_to_html_node_lol(self):
         control = "<code>hehehe</code>"
         compare = TextNode("hehehe", TextType.CODE, {"href": "https://dork.com"})
         self.assertEqual(control, text_node_to_html_node(compare))
 
-    def test_text_node_to_html_node(self):
+    def test_text_node_to_html_node_wo(self):
         control = "<a href=\"https://dork.com\">hehehe</a>"
         compare = TextNode("hehehe", TextType.LINKS, {"href": "https://dork.com"})
         self.assertEqual(control, text_node_to_html_node(compare))
 
-    def test_text_node_to_html_node(self):
+    def test_text_node_to_html_node_haha(self):
         control = "<img src=\"https://dork.com\" alt=\"this is a pee\"></img>"
         compare = TextNode("hehehe", TextType.IMAGES, {"src": "https://dork.com", "alt": "this is a pee"})
         self.assertEqual(control, text_node_to_html_node(compare))
 
-    def test_text_node_to_html_node(self):
+    def test_text_node_to_html_node_hehe(self):
         TextNode("hehehe", "hehe", {"href": "https://dork.com"})
         with self.assertRaises(Exception):
             text_node_to_html_node()
