@@ -5,9 +5,9 @@ from markdowns import *
 class TestMarkdown(unittest.TestCase):
 
     def test_markdown_to_blocks(self):
-        control = ["Block 1", "Block 2\nBlock 4", "Block 3!!!"]
+        control = ["Block 1", "Block 2", "Block 4", "Block 3!!!"]
         teste = "Block 1\n\nBlock 2\nBlock 4   \n\n\n  Block 3!!!"
-        test = markdown_to_blocks(teste)
+        test = markdown_to_blocks(teste, "\n")
         self.assertEqual(control, test)
 
     def test_markdown_to_blocks_heading(self):
@@ -54,11 +54,29 @@ class TestMarkdown(unittest.TestCase):
     def test_markdown_to_html_node_2(self):
         control = HTMLNode("div", None, [
              HTMLNode("h1", "Title"),
-             HTMLNode("p", "This is a paragraph"),
+             HTMLNode("p", "This is a paragraph."),
              HTMLNode("ul", None, [
                  HTMLNode("li", "Item 1"),
                  HTMLNode("li", "Item 2")
              ])
          ])   
         test = "# Title\nThis is a paragraph.\n\n- Item 1\n- Item 2"
+        self.assertEqual(control, markdown_to_html_node(test))
+    
+    def test_markdown_to_html_node_3(self):
+        control = HTMLNode("div", None, [
+             HTMLNode("h1", "Title"),
+             HTMLNode("p", "This is a paragraph."),
+         ])   
+        test = "# Title\nThis is a paragraph."
+        self.assertEqual(control, markdown_to_html_node(test))
+
+    def test_markdown_to_html_node_4(self):
+        control = HTMLNode("div", None, [
+             HTMLNode("ul", None, [
+                 HTMLNode("li", "Item 1"),
+                 HTMLNode("li", "Item 2")
+             ])
+         ])   
+        test = "- Item 1\n- Item 2"
         self.assertEqual(control, markdown_to_html_node(test))

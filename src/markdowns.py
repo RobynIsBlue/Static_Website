@@ -21,13 +21,14 @@ def block_to_block_type(text):
         return "Unordered List"
     elif text.startswith(">"):
         return "Quote"
+    #fix the count :')
     elif re.match(rf"^{count}. ", text):
         return "Ordered List"
     else:
         return "Paragraph"
 
-def markdown_to_html_node(markdown):
-    blocked_markdown = markdown_to_blocks(markdown)
+def markdown_to_html_node(markdown, header_num="\n\n"):
+    blocked_markdown = markdown_to_blocks(markdown, header_num)
     block_types = ["Paragraph", "Heading", "Code", "Unordered List", "Quote", "Ordered List"]
     tags = ["p", "h", "code", "ul", "blockquote", "ol"]
     blocks = []
@@ -38,16 +39,26 @@ def markdown_to_html_node(markdown):
         if block_type == "Heading":
             heading_split = black.split()
             tags[1] = f"h{len(heading_split[0])}"
+            if "\n" in black:
+                blocks.extend(markdown_to_html_node(black, "\n").children)
+                continue
+            block = strip_beginning(black)
+            index = block_types.index(block_type)
+            blocks.append(HTMLNode(tags[index], block, child))
+            continue
 
         if block_type == "Ordered List" or block_type == "Unordered List":
             child = text_to_children(black, "li")
+            blocks.append(HTMLNode("ul", None, child))
+            continue
+
         block = strip_beginning(black)
         index = block_types.index(block_type)
         blocks.append(HTMLNode(tags[index], block, child))
     return HTMLNode("div", None, blocks)
 
-def markdown_to_blocks(markdown):
-    say = markdown.split("\n\n")
+def markdown_to_blocks(markdown, splitter):
+    say = markdown.split(splitter)
     returned = []
     for marked in say:
         if marked != "":
@@ -58,7 +69,8 @@ def text_to_children(text, delim):
     splat = text.split("\n")
     childs = []
     for splot in splat:
-        childs.append(HTMLNode(delim, splot))
+        block = strip_beginning(splot)
+        childs.append(HTMLNode(delim, block))
     return childs
     
 def strip_beginning(markdown):
