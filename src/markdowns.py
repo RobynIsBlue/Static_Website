@@ -1,14 +1,7 @@
 from enum import Enum
+from htmlnode import *
 
-def markdown_to_blocks(markdown):
-    markdown.split("\n")
-    returned = []
-    for marked in markdown:
-        if marked != "\n":
-            returned.append(marked)
-    return returned
-
-
+import re
 
 class MarkDownType(Enum):
     PARAGRAPH = 1
@@ -19,24 +12,58 @@ class MarkDownType(Enum):
     ORDERED_LIST = 6
 
 def block_to_block_type(text):
-    if text.text[0] == "#":
-        #HEADING
-        pass
-    if text[0:2] == "```":
-        # CODE
-        pass
-    if text[0] == ">":
-        # QUOTE
-        pass
-    if text[0:1] == "* " or text[0:1] == "- ":
-        #UNORDERED_LIST
-        pass
-    hehe = 1
-    text.split("\n")
-    for line in text:
-        if line[0:2] != f"{hehe}. ":
-            #PARAGRAPH
-            pass
-    #ORDERED_LIST
-    pass
+    count = 1
+    if re.match(r"^#{1,6} ", text):
+        return "Heading"
+    elif re.match(r"^\`\`\`", text):
+        return "Code"
+    elif text.startswith("* ") or text.startswith("- "):
+        return "Unordered List"
+    elif text.startswith(">"):
+        return "Quote"
+    elif re.match(rf"^{count}. ", text):
+        return "Ordered List"
+    else:
+        return "Paragraph"
 
+def markdown_to_html_node(markdown):
+    blocked_markdown = markdown_to_blocks(markdown)
+    block_types = ["Paragraph", "Heading", "Code", "Unordered List", "Quote", "Ordered List"]
+    tags = ["p", "h", "code", "ul", "blockquote", "ol"]
+    blocks = []
+    for black in blocked_markdown:
+        child = None
+        block_type = block_to_block_type(black)
+
+        if block_type == "Heading":
+            heading_split = black.split()
+            tags[1] = f"h{len(heading_split[0])}"
+
+        if block_type == "Ordered List" or block_type == "Unordered List":
+            child = text_to_children(black, "li")
+        block = strip_beginning(black)
+        index = block_types.index(block_type)
+        blocks.append(HTMLNode(tags[index], block, child))
+    return HTMLNode("div", None, blocks)
+
+def markdown_to_blocks(markdown):
+    say = markdown.split("\n\n")
+    returned = []
+    for marked in say:
+        if marked != "":
+            returned.append(marked.lstrip("\n").lstrip(" ").rstrip(" "))
+    return returned
+
+def text_to_children(text, delim):
+    splat = text.split("\n")
+    childs = []
+    for splot in splat:
+        childs.append(HTMLNode(delim, splot))
+    return childs
+    
+def strip_beginning(markdown):
+    hehe = markdown.split(" ")
+    begs = ["*", "-", "#"]
+    if hehe[0] in begs or re.match(r"^#{1, 6}", hehe[0]):
+        return " ".join(hehe[1:])
+    return markdown
