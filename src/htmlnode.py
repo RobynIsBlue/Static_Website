@@ -57,6 +57,8 @@ class ParentNode(HTMLNode):
         if self.props != None:
             htmlized = self.props_to_html()
         for child in self.children:
+            # if isinstance(child, ParentNode):
+            #     child_list.append(child.)                
             child_list.append(child.to_html())
         joined_child_list = "".join(child_list)
         return f"<{self.tag}{htmlized}>{joined_child_list}</{self.tag}>"
