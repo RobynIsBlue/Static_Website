@@ -1,5 +1,6 @@
 from textnode import *
 from markdowns import *
+from split_nodes import *
 
 import os
 import shutil
@@ -40,27 +41,22 @@ def generate_page(from_path, template_path, dest_path):
     new_first = markdown_to_html_node(read_from_path)
     string_new_first = new_first.to_html()
     title = extract_title(from_path)
-    content = read_from_path.replace(f"{extract_title(from_path)}", "")
-
-    read_template_path.replace("{{ Title }}", title)
-    read_template_path.replace("{{ Content }}", content)
-    split_from = from_path.split("\n")
-    split_dest = dest_path.split("\n")
+    replace_1 = read_template_path.replace("{{ Title }}", title)
+    replace_2 = replace_1.replace("{{ Content }}", string_new_first)
+    split_from = from_path.split("/")
+    split_dest = dest_path.split("/")
 
     for x in range(len(split_dest)):
         if split_dest[0] != split_from[:-1]:
             break
         split_from.pop()
         split_dest(0)
-    new_list = split_dest + split_from
-    newer_list = "/".join(new_list)
+    new_list = split_dest[:-1] + split_from[:-1] + split_dest[-1:]
+    newer_list = "/".join(new_list[:-1])
     os.makedirs(newer_list)
-    open()
-
-    
-
-    
-
+    newerer_list = "/".join(new_list)
+    with open(newerer_list, "w") as f:
+        f.write(replace_2)
 
 def main():
     plus_delete("content", "public")

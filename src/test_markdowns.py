@@ -54,7 +54,7 @@ class TestMarkdown(unittest.TestCase):
 
     def test_markdown_to_html_node_1(self):
         test = "hi"
-        control = ParentNode("div", None, [LeafNode("p", test)])
+        control = ParentNode("div", [LeafNode("p", test)])
         self.assertEqual(control, markdown_to_html_node(test))
 
     def test_markdown_to_html_node_2(self):

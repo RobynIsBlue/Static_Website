@@ -83,4 +83,8 @@ def strip_beginning(markdown):
         return " ".join(hehe[1:])
     if re.match(r"#{1,6}", hehe[0]):
         return " ".join(hehe[1:])
+    if markdown.startswith("```") and markdown.endswith("```"):
+        hey = list(markdown)
+        return "".join(hey[3:-4])
+
     return markdown
