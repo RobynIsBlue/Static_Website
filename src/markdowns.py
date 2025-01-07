@@ -53,6 +53,8 @@ def markdown_to_html_node(markdown, header_num="\n\n"):
 
         if block_type == "Ordered List":
             child = text_to_children(black, "li")
+            for chi in child:
+                chi.value = chi.value[3:]
             blocks.append(ParentNode("ol", child))
             continue
             

@@ -75,10 +75,14 @@ def split_nodes_links(old_nodes):
         return [old_nodes]
 
 def text_to_textnodes(text):
-    linked = split_nodes_image(TextNode(text, TextType.NORMAL))
+    new_node = TextNode(text, TextType.NORMAL)
+    linked = split_nodes_image(new_node)
     nodey = []
-    for linki in linked:
-        nodey.append(split_nodes_links(linki))
+    if len(linked) == 1:
+        nodey = [split_nodes_links(linked[0])]
+    else:
+        for linki in linked:
+            nodey.append(split_nodes_links(linki))
     nodes = sum(nodey, [])
     return split_nodes_delimiter(split_nodes_delimiter(split_nodes_delimiter(nodes, "**", TextType.BOLD), "*", TextType.ITALIC), "`", TextType.CODE)
 
