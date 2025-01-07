@@ -1,5 +1,6 @@
 from enum import Enum
 from htmlnode import *
+from split_nodes import text_to_textnodes
 
 import re
 
@@ -47,17 +48,22 @@ def markdown_to_html_node(markdown, header_num="\n\n"):
                 continue
             block = strip_beginning(black)
             index = block_types.index(block_type)
-            blocks.append(LeafNode(tags[index], block))
+            blocks.append(parent_of_text_nodes(block, tags[index]))
             continue
 
-        if block_type == "Ordered List" or block_type == "Unordered List":
+        if block_type == "Ordered List":
+            child = text_to_children(black, "li")
+            blocks.append(ParentNode("ol", child))
+            continue
+            
+        if block_type == "Unordered List":
             child = text_to_children(black, "li")
             blocks.append(ParentNode("ul", child))
             continue
 
         block = strip_beginning(black)
         index = block_types.index(block_type)
-        blocks.append(LeafNode(tags[index], block))
+        blocks.append(parent_of_text_nodes(block, tags[index]))
     return ParentNode("div", blocks)
 
 def markdown_to_blocks(markdown, splitter):
@@ -73,7 +79,7 @@ def text_to_children(text, delim):
     childs = []
     for splot in splat:
         block = strip_beginning(splot)
-        childs.append(LeafNode(delim, block))
+        childs.append(parent_of_text_nodes(block, delim))
     return childs
     
 def strip_beginning(markdown):
@@ -83,8 +89,13 @@ def strip_beginning(markdown):
         return " ".join(hehe[1:])
     if re.match(r"#{1,6}", hehe[0]):
         return " ".join(hehe[1:])
-    if markdown.startswith("```") and markdown.endswith("```"):
-        hey = list(markdown)
-        return "".join(hey[3:-4])
-
     return markdown
+
+def parent_of_text_nodes(block, tag):
+    blocks = []
+    if len(text_to_textnodes(block)) > 1:
+        for one_text_node in text_to_textnodes(block):
+            blocks.append(text_node_to_html_node(one_text_node))
+        return LeafNode(tag, "".join(blocks))
+    else:
+        return LeafNode(tag, block)

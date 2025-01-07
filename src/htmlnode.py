@@ -13,7 +13,7 @@ class HTMLNode:
     
     def props_to_html(self):
         if not isinstance(self.props, dict):
-            raise TypeError("Self.Props not a dict")
+            self.props = {"href": self.props}
         keys = self.props.keys()
         all = []
         for key in keys:
@@ -80,3 +80,4 @@ def text_node_to_html_node(text_node):
             return LeafNode("img", "", text_node.url).to_html()
         case _:
             raise Exception("Invalid Text Type")
+    

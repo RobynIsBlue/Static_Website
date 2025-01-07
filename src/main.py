@@ -1,6 +1,5 @@
 from textnode import *
 from markdowns import *
-from split_nodes import *
 
 import os
 import shutil
@@ -46,20 +45,24 @@ def generate_page(from_path, template_path, dest_path):
     split_from = from_path.split("/")
     split_dest = dest_path.split("/")
 
-    for x in range(len(split_dest)):
-        if split_dest[0] != split_from[:-1]:
-            break
-        split_from.pop()
-        split_dest(0)
-    new_list = split_dest[:-1] + split_from[:-1] + split_dest[-1:]
-    newer_list = "/".join(new_list[:-1])
-    os.makedirs(newer_list)
-    newerer_list = "/".join(new_list)
-    with open(newerer_list, "w") as f:
+    # for x in range(len(split_dest)):
+    #     if split_dest[0] != split_from[:-1]:
+    #         break
+    #     split_from.pop()
+    #     split_dest(0)
+    # new_list = split_dest[:-1] + split_from[:-1] + split_dest[-1:]
+    # newer_list = "/".join(new_list[:-1])
+    # os.makedirs(newer_list)
+    # newerer_list = "/".join(new_list)
+
+    with open(dest_path, "w") as f:
         f.write(replace_2)
 
 def main():
-    plus_delete("content", "public")
+    shutil.rmtree("public")
+    os.mkdir("public")
+    recurring_files_to_dest("static", "public")
+    generate_page("content/index.md", "template.html", "public/index.html")
 
 # Using the special variable 
 # __name__

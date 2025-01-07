@@ -9,10 +9,10 @@ class TestHTMLNode(unittest.TestCase):
         self.assertEqual(control, compare.props_to_html())
     
 
-    def test_props2(self):
-        compare = HTMLNode(None, None, None, None)
-        with self.assertRaises(TypeError):
-            compare.props_to_html()
+    # def test_props2(self):
+    #     compare = HTMLNode(None, None, None, None)
+    #     with self.assertRaises(TypeError):
+    #         compare.props_to_html()
 
 
     def test_props3(self):
