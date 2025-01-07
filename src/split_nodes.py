@@ -74,6 +74,9 @@ def split_nodes_links(old_nodes):
     else:
         return [old_nodes]
 
+#Having issues with code blocks and quote blocks.
+#Code blocks keep making TextNodes with TextNodes as their text.
+#Issue is probably with line 85
 def text_to_textnodes(text):
     new_node = TextNode(text, TextType.NORMAL)
     linked = split_nodes_image(new_node)
