@@ -11,5 +11,7 @@ class TestHTMLNode(unittest.TestCase):
         generate_page("content/index.md", "template.html", "public/index.html")
     
     def test_generate_page_recursive(self):
+        shutil.rmtree("public")
+        os.mkdir("public")
         generate_pages_recursive("content", "template.html", "public")
         

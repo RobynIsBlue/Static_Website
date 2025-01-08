@@ -13,7 +13,10 @@ class HTMLNode:
     
     def props_to_html(self):
         if not isinstance(self.props, dict):
-            self.props = {"href": self.props}
+            if self.tag == "a":
+                self.props = {"href": self.props}
+            if self.tag == "img":
+                self.props = {"src": self.props}
         keys = self.props.keys()
         all = []
         for key in keys:

@@ -93,9 +93,10 @@ def strip_beginning(markdown):
 
 def parent_of_text_nodes(block, tag):
     blocks = []
-    if len(text_to_textnodes(block)) > 1:
-        for one_text_node in text_to_textnodes(block):
+    blah = text_to_textnodes(block)
+    if len(blah) > 1:
+        for one_text_node in blah:
             blocks.append(text_node_to_html_node(one_text_node))
         return LeafNode(tag, "".join(blocks))
     else:
-        return LeafNode(tag, block)
+        return LeafNode(tag, text_node_to_html_node(blah[0]))
