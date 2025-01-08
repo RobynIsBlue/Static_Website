@@ -87,7 +87,7 @@ def text_to_textnodes(text):
         for linki in linked:
             nodey.append(split_nodes_links(linki))
     nodes = sum(nodey, [])
-    return split_nodes_delimiter(split_nodes_delimiter(split_nodes_delimiter(nodes, "**", TextType.BOLD), "*", TextType.ITALIC), "`", TextType.CODE)
+    return split_nodes_delimiter(split_nodes_delimiter(split_nodes_delimiter(nodes, "**", TextType.BOLD), "*", TextType.ITALIC), "```", TextType.CODE)
 
 
 

@@ -42,9 +42,9 @@ def generate_page(from_path, template_path, dest_path):
     title = extract_title(from_path)
     replace_1 = read_template_path.replace("{{ Title }}", title)
     replace_2 = replace_1.replace("{{ Content }}", string_new_first)
-    split_from = from_path.split("/")
-    split_dest = dest_path.split("/")
 
+    # split_from = from_path.split("/")
+    # split_dest = dest_path.split("/")
     # for x in range(len(split_dest)):
     #     if split_dest[0] != split_from[:-1]:
     #         break
@@ -58,11 +58,33 @@ def generate_page(from_path, template_path, dest_path):
     with open(dest_path, "w") as f:
         f.write(replace_2)
 
+def generate_pages_recursive(dir_path_content, template_path, dest_dir_path):
+    split_dir_path_content = dir_path_content.split("/")
+    new_dir = dest_dir_path
+    add_to_new_dir = dir_path_content
+    if os.path.isfile(dir_path_content):
+        split_file = split_dir_path_content[-1]
+        file = split_file.split(".")[0]
+        extension = split_file.split(".")[-1]
+        if extension == "md":
+            generate_page(dir_path_content, template_path, dest_dir_path + "/" + file + ".html")
+        else:
+            pass
+    else:
+        os.mkdir(dest_dir_path + "/" + dir_path_content.split("/")[-1])
+        for file_or_dir in os.listdir(dir_path_content):
+            if len(split_dir_path_content) > 1:
+                add_to_new_dir = "/".join(dir_path_content.split("/")[1:])
+            
+            generate_pages_recursive(dir_path_content + "/" + file_or_dir, template_path, new_dir + "/" + add_to_new_dir)
+
+    
+
 def main():
     shutil.rmtree("public")
     os.mkdir("public")
     recurring_files_to_dest("static", "public")
-    generate_page("content/index.md", "template.html", "public/index.html")
+    generate_pages_recursive("content", "template.html", "public")
 
 # Using the special variable 
 # __name__

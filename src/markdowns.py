@@ -22,8 +22,6 @@ def block_to_block_type(text):
         return "Unordered List"
     if text.startswith(">"):
         return "Quote"
-    #fix the count :')
-
     sext = text.split("\n")
     for line in sext:
         count += 1
@@ -34,7 +32,7 @@ def block_to_block_type(text):
 def markdown_to_html_node(markdown, header_num="\n\n"):
     blocked_markdown = markdown_to_blocks(markdown, header_num)
     block_types = ["Paragraph", "Heading", "Code", "Unordered List", "Quote", "Ordered List"]
-    tags = ["p", "h", "code", "ul", "blockquote", "ol"]
+    tags = ["p", "h", None, "ul", "blockquote", "ol"]
     blocks = []
     for black in blocked_markdown:
         child = None
@@ -86,7 +84,7 @@ def text_to_children(text, delim):
     
 def strip_beginning(markdown):
     hehe = markdown.split(" ")
-    begs = ["*", "-", "#"]
+    begs = ["*", "-", "#", ">"]
     if hehe[0] in begs:
         return " ".join(hehe[1:])
     if re.match(r"#{1,6}", hehe[0]):
